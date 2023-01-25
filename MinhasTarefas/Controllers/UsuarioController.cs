@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using MinhasTarefas.Models;
+using MinhasTarefas.Repositorios.Interfaces;
 using Swashbuckle.Swagger.Annotations;
 
 namespace MinhasTarefas.Controllers
@@ -10,15 +11,46 @@ namespace MinhasTarefas.Controllers
     
     public class UsuarioController : ControllerBase
     {
+        private readonly IUsuarioRepositorio _usuarioRepositorio;
+
+        public UsuarioController(IUsuarioRepositorio usuarioRepositorio)
+        {
+            _usuarioRepositorio = usuarioRepositorio;
+        }
         [HttpGet]
         [Route("BuscarTodosUsuarios")]
         [SwaggerResponse((HttpStatusCode.OK))]
         [SwaggerResponse((HttpStatusCode.BadRequest))]
         [SwaggerResponse((HttpStatusCode.InternalServerError))]
         
-        public ActionResult<List<UsuariosModel>> BuscarTodosUsuarios()
+        public async Task <ActionResult<List<UsuariosModel>>> BuscarTodosUsuarios()
         {
-            return Ok();
+            List<UsuariosModel> usuariosModels = await _usuarioRepositorio.BuscarTodosUsuarios();
+            return Ok(usuariosModels);
         }
+
+        [HttpGet("{id}")]
+        [Route("BuscarUsuarioPorId")]
+        [SwaggerResponse((HttpStatusCode.OK))]
+        [SwaggerResponse((HttpStatusCode.BadRequest))]
+        [SwaggerResponse((HttpStatusCode.InternalServerError))]
+
+        public async Task<ActionResult<UsuariosModel>> BuscarUsuarioPorId(int id)
+        {
+            UsuariosModel usuariosModel = await _usuarioRepositorio.BuscarUsuarioPorId(id);
+            return Ok(usuariosModel);
+        }
+
+        [HttpPost]
+        [Route("AdicionarUsuario")]
+        [SwaggerResponse((HttpStatusCode.OK))]
+        [SwaggerResponse((HttpStatusCode.BadRequest))]
+        [SwaggerResponse((HttpStatusCode.InternalServerError))]
+        public async Task<ActionResult<UsuariosModel>> AdicionarUsuario([FromBody] UsuariosModel usuariosModel)
+        {
+            usuariosModel = await _usuarioRepositorio.AdicionarUsuario(usuariosModel);
+            return Ok(usuariosModel);
+        }
+
     }
 }
