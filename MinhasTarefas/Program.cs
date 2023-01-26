@@ -12,11 +12,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-string _stringConexao = builder.Configuration.GetConnectionString("DataBase");
-builder.Services.AddEntityFrameworkMySql()
-    .AddDbContext<TarefasDbContext>(
-        options => options.UseMySql(_stringConexao, ServerVersion.AutoDetect(_stringConexao))
-        );
+//Instancia MySQL 
+
+//string _stringConexao = builder.Configuration.GetConnectionString("DataBase");
+//builder.Services.AddEntityFrameworkMySql()
+//    .AddDbContext<TarefasDbContext>(
+//        options => options.UseMySql(_stringConexao, ServerVersion.AutoDetect(_stringConexao))
+//        );
+//builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+
+
+//Intancia SQL Server
+var connectionstring = builder.Configuration.GetConnectionString("DataBaseSQL-Server");
+builder.Services.AddDbContext<TarefasDbContext>(option => option.UseSqlServer(connectionstring));
 
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 

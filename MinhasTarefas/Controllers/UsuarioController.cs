@@ -19,9 +19,9 @@ namespace MinhasTarefas.Controllers
         }
         [HttpGet]
         [Route("BuscarTodosUsuarios")]
-        [SwaggerResponse((HttpStatusCode.OK))]
-        [SwaggerResponse((HttpStatusCode.BadRequest))]
-        [SwaggerResponse((HttpStatusCode.InternalServerError))]
+        //[SwaggerResponse((HttpStatusCode.OK))]
+        //[SwaggerResponse((HttpStatusCode.BadRequest))]
+        //[SwaggerResponse((HttpStatusCode.InternalServerError))]
         
         public async Task <ActionResult<List<UsuariosModel>>> BuscarTodosUsuarios()
         {
@@ -29,7 +29,7 @@ namespace MinhasTarefas.Controllers
             return Ok(usuariosModels);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         [Route("BuscarUsuarioPorId")]
         [SwaggerResponse((HttpStatusCode.OK))]
         [SwaggerResponse((HttpStatusCode.BadRequest))]
@@ -50,6 +50,31 @@ namespace MinhasTarefas.Controllers
         {
             usuariosModel = await _usuarioRepositorio.AdicionarUsuario(usuariosModel);
             return Ok(usuariosModel);
+        }
+
+        [HttpPut]
+        [Route("AtualizarUsuario")]
+        [SwaggerResponse((HttpStatusCode.OK))]
+        [SwaggerResponse((HttpStatusCode.BadRequest))]
+        [SwaggerResponse((HttpStatusCode.InternalServerError))]
+
+        public async Task<ActionResult<UsuariosModel>> AtualizarUsuario([FromBody] UsuariosModel usuariosModel, int id)
+        {
+            usuariosModel.Id = id;
+            UsuariosModel usuarios = await _usuarioRepositorio.AtualizarUsuario(usuariosModel, id);
+            return Ok(usuarios);
+        }
+
+        [HttpDelete]
+        [Route("ApagarUsuario")]
+        [SwaggerResponse((HttpStatusCode.OK))]
+        [SwaggerResponse((HttpStatusCode.BadRequest))]
+        [SwaggerResponse((HttpStatusCode.InternalServerError))]
+
+        public async Task<ActionResult<UsuariosModel>> ApagarUsuario(int id)
+        {
+            bool apagado = await _usuarioRepositorio.ApagarUsuario(id);
+            return Ok(apagado);
         }
 
     }
