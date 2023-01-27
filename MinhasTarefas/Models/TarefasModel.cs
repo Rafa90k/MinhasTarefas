@@ -11,4 +11,8 @@ public class TarefasModel
     public string? Descricao { get; set; }
     
     public StatusTarefa Status { get; set; }
+
+    public int? UsuarioId { get; set; }
+
+    public virtual UsuariosModel? Usuario { get; set; }
 }

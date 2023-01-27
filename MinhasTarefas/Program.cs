@@ -27,6 +27,7 @@ var connectionstring = builder.Configuration.GetConnectionString("DataBaseSQL-Se
 builder.Services.AddDbContext<TarefasDbContext>(option => option.UseSqlServer(connectionstring));
 
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+builder.Services.AddScoped<ITarefaRepositorio, TarefaRepositorio>();
 
 var app = builder.Build();
 
