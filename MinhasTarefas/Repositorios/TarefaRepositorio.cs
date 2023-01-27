@@ -16,12 +16,16 @@ public class TarefaRepositorio : ITarefaRepositorio
 
     public async Task<List<TarefasModel>> BuscarTodasTarefas()
     {
-        return await _dbContext.TarefasModels.ToListAsync();
+        return await _dbContext.TarefasModels
+            .Include(x => x.Usuario)
+            .ToListAsync();
     }
 
     public async Task<TarefasModel> BuscarTarefaPorId(int id)
     {
-        return await _dbContext.TarefasModels.FirstOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.TarefasModels
+            .Include(x => x.Usuario)
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<TarefasModel> AdicionarTarefa(TarefasModel tarefasModel)
