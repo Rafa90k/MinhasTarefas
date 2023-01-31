@@ -60,9 +60,18 @@ namespace MinhasTarefas.Controllers
 
         public async Task<ActionResult<UsuariosModel>> AtualizarUsuario([FromBody] UsuariosModel usuariosModel, int id)
         {
-            usuariosModel.Id = id;
-            UsuariosModel usuarios = await _usuarioRepositorio.AtualizarUsuario(usuariosModel, id);
-            return Ok(usuarios);
+            try
+            {
+                usuariosModel.Id = id;
+                UsuariosModel usuarios = await _usuarioRepositorio.AtualizarUsuario(usuariosModel, id);
+                return Ok(usuarios);
+            }
+            catch (Exception ex)
+            {
+                string retorbno = $"Ocorreu um erro ao excluir o usuario {ex.Message}";
+                return BadRequest(retorbno);
+            }
+            
         }
 
         [HttpDelete]
@@ -73,8 +82,16 @@ namespace MinhasTarefas.Controllers
 
         public async Task<ActionResult<UsuariosModel>> ApagarUsuario(int id)
         {
-            bool apagado = await _usuarioRepositorio.ApagarUsuario(id);
-            return Ok(apagado);
+            try
+            {
+                bool apagado = await _usuarioRepositorio.ApagarUsuario(id);
+                return Ok(apagado);
+            }
+            catch (Exception ex)
+            {
+                string retorbno = $"Ocorreu um erro ao excluir o usuario {ex.Message}";
+                return BadRequest(retorbno);
+            }
         }
 
     }

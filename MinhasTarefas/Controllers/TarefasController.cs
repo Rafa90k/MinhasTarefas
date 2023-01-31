@@ -9,7 +9,7 @@ namespace MinhasTarefas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
+
     public class TarefasController : ControllerBase
     {
         private readonly ITarefaRepositorio _tarefasRepositorio;
@@ -24,7 +24,7 @@ namespace MinhasTarefas.Controllers
         [SwaggerResponse((HttpStatusCode.BadRequest))]
         [SwaggerResponse((HttpStatusCode.InternalServerError))]
 
-        public async Task <ActionResult<List<TarefasModel>>> BuscarTodosUsuarios()
+        public async Task<ActionResult<List<TarefasModel>>> BuscarTodosUsuarios()
         {
             List<TarefasModel> tarefasModel = await _tarefasRepositorio.BuscarTodasTarefas();
             return Ok(tarefasModel);
@@ -54,16 +54,25 @@ namespace MinhasTarefas.Controllers
         }
 
         [HttpPut]
-        [Route("AtualizarTarefa")]
+        [Route("AtualizarTarefa/{id}")]
         [SwaggerResponse((HttpStatusCode.OK))]
         [SwaggerResponse((HttpStatusCode.BadRequest))]
         [SwaggerResponse((HttpStatusCode.InternalServerError))]
 
         public async Task<ActionResult<UsuariosModel>> AtualizarTarefa([FromBody] TarefasModel tarefasModel, int id)
         {
-            tarefasModel.Id = id;
-            TarefasModel tarefas = await _tarefasRepositorio.AtualizarTarefa(tarefasModel, id);
-            return Ok(tarefas);
+            try
+            {
+                tarefasModel.Id = id;
+                TarefasModel tarefas = await _tarefasRepositorio.AtualizarTarefa(tarefasModel, id);
+                return Ok(tarefas);
+            }
+            catch (Exception ex)
+            {
+                string retorno = $"Ocorreu um erro ao excluir o usuario {ex.Message}";
+                return BadRequest(retorno);
+            }
+            
         }
 
         [HttpDelete]
@@ -74,9 +83,18 @@ namespace MinhasTarefas.Controllers
 
         public async Task<ActionResult<TarefasModel>> ApagarTarefa(int id)
         {
-            bool apagado = await _tarefasRepositorio.ApagarTarefa(id);
-            return Ok(apagado);
+            try
+            {
+                bool apagado = await _tarefasRepositorio.ApagarTarefa(id);
+                return Ok(apagado);
+            }
+            catch (Exception ex)
+            {
+                string retorbno = $"Ocorreu um erro ao excluir o usuario {ex.Message}";
+                return BadRequest(retorbno);
+            }
+
+        }
         }
 
     }
-}
